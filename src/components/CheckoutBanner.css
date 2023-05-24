@@ -1,0 +1,50 @@
+/* checkout_ad
+ checkout_ad_img
+  a-section
+   maple-banner__text
+a-color-price
+a-text-strike
+cost
+cost-after-savings */
+
+.checkout_ad_img {
+    width: 70px;
+}
+
+.checkout_ad {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    width: 80%;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+button {
+    border: 1px solid #cfcfcf;
+    background: white;
+    border-radius: 20px;
+    font-size: 11px;
+    padding: 4px;
+    margin-right: 53px;
+}
+
+.a-section maple-banner__text {
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.a-text-strike {
+    text-decoration: line-through!important;
+}
+
+.a-color-price {
+    color: #B12704!important;
+    font-weight: 700;
+}
+
+.a-text-bold {
+    font-weight: 700;
+}
