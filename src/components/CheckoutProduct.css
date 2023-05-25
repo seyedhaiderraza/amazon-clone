@@ -6,7 +6,9 @@
 }
 
 .checkoutProduct_info {
-    padding-left: 20px
+    padding-left: 20px;
+    overflow: hidden;
+    /*text from flowing out on resize (checkout page left pane)*/
 }
 
 .checkoutProduct_info>button {
@@ -30,5 +32,8 @@
 
 .checkoutProduct_title {
     font-size: 17px;
-    font-weight: 800;
+    font-weight: 500;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    width: 100%;
 }
