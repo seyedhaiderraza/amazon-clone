@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './Header.css'
 import logo from '../img/amazon-logo.png'
 import SearchIcon from "@mui/icons-material/Search"
 import { ShoppingBasket} from '@mui/icons-material'
 import { Link, Route, Routes } from 'react-router-dom'
+import { StateContext } from '../state/StateProvider'
 const Header = () => {
+    const {basket} = useContext(StateContext)
   return (
    
     <div className='header'>
@@ -31,7 +33,7 @@ const Header = () => {
                     <Link to="/checkout">
                     <div className="header_optionBasket">
                         <ShoppingBasket />
-                        <span className="header_optionLineTwo header_basketCount">0</span>
+                        <span className="header_optionLineTwo header_basketCount">{basket?.length}</span>
                     </div>
                     </Link>
               </div>

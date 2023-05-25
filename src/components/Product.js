@@ -1,8 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './Product.css'
-const Product = ({title, image, price, rating}) => {
+import { StateContext } from '../state/StateProvider'
+const Product = ({id, title, image, price, rating,isCheckout=false}) => {
+
+  const {addtoBasket} = useContext(StateContext)
+
+  const addBasket = ()=>{
+    addtoBasket({
+      id:id,
+      title:title,
+      image:image,
+      price: price,
+      rating: rating
+    })
+  }
   return (
-    <div className="product">
+    <div className="product" key={id}>
         <div className="product_info">
             <p>{title.length>100?title.slice(0,100)+'...':title}</p>
             <p className="product_price">
@@ -13,12 +26,13 @@ const Product = ({title, image, price, rating}) => {
             {Array(rating).fill().map((_,i)=><p>⭐</p>)}
             </div>
         </div>
-            <img
+        
+            
+              <img
              src={image}
               alt="Laptop Image" />
-            <button>Add to Basket</button>
-      
-            
+           {!isCheckout && (<> <button onClick={addBasket}>Add to Basket</button> </>)
+        }
     </div>
   )
 }
