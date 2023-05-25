@@ -10,6 +10,7 @@ const Checkout = () => {
   const {basket} = useContext(StateContext)
   return (
     <>
+     <Header/>
     <CheckoutBanner/>
     <div className="checkout">
       <div className="checkout_left">

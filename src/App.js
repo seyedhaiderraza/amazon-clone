@@ -10,7 +10,6 @@ function App() {
     <>
    
     <Router>
-    <Header/>
     <div className="App">
    
       <Routes>
