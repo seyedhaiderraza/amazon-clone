@@ -2,7 +2,7 @@ import { React, useState,useReducer,createContext } from "react";
 
 const initialState ={
     basket: [],
-
+    user:null
 };
 
  const reducer = (state, action)=>{
@@ -31,6 +31,17 @@ const initialState ={
                 ...state,
                 basket:newBasket
             };
+           
+         case 'LOGIN':
+            return {
+                ...state,
+                user:action.user
+            }
+         case 'LOGOUT': return {
+            ...state,
+            user:null
+        }
+
             default:
                 return state;
     }
@@ -56,10 +67,26 @@ console.log(state)//basket
                     id:productId
                 }
             )
-    }
+        }
+        const login = (user)=>{
+            dispatch(
+                {
+                    type: 'LOGIN',
+                    user:user
+                }
+            )
+        }
+        const logout = ()=>{
+            dispatch(
+                {
+                    type: 'LOGOUT',
+                    user:null
+                }
+            )
+        }
 
    return( 
-   <StateContext.Provider value={{basket:state.basket, addtoBasket,removeFromBasket}}
+   <StateContext.Provider value={{basket:state.basket, addtoBasket,removeFromBasket, user:state.user, login, logout}}
         {...props} />
         )
 }

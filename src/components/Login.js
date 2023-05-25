@@ -1,19 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, } from 'react'
 import  './Login.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate  } from 'react-router-dom'
+import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '../firebase'
 
 const Login = () => {
+  const navigate = useNavigate()
   const [email,setEmail] =useState('')
   const [password,setPassword] =useState('')
 
-  const submitForm = (e)=>{
+  const signIn = (e)=>{
     console.log('login',email,password)
     e.preventDefault()
     //firebase login
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCreds)=>{
+      const user = userCreds.user
+      console.log(user)
+      navigate('/')
+    }).catch(error=>{
+      alert(error.message);
+    })
   }
   const register = (e)=>{
     e.preventDefault()
     //firebase register
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCreds)=>{
+      const user = userCreds.user
+      console.log(user)
+      navigate('/')
+    })
+    .catch(error=>{
+      alert(error.message);
+    })
   }
   return (
     <div className="login">
@@ -29,7 +48,7 @@ const Login = () => {
             <input type="text" value={email} onChange={e=>setEmail(e.target.value)} />
             <h5>Password</h5>
             <input type="password" value={password} onChange={e=>setPassword(e.target.value)}  />
-            <button type="submit" className="login_signInButton" onClick={submitForm}>Sign In</button>
+            <button type="submit" className="login_signInButton" onClick={signIn}>Sign In</button>
           </form>
           <p>
           You agree that any cause of action related to
