@@ -9,6 +9,7 @@ import { useContext, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { StateContext } from './state/StateProvider';
+import Payment from './components/Payment';
 function App() {
   const {user,login,logout} = useContext(StateContext)
   useEffect(()=>{
@@ -35,6 +36,7 @@ function App() {
        <Route path="/" element={<Home/>} />
        <Route path="/checkout" element={<Checkout/>} />
        <Route path="/login" element={<Login/>} />
+       <Route path="/payment" element={<Payment/>} />
       </Routes>
    
     </div>

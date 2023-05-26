@@ -2,6 +2,15 @@ import React from 'react'
 import './Home.css'
 import Product from './Product'
 import Header from './Header'
+//import styled from 'styled-components'
+
+// const ProductWrapper = styled.div`
+//  transition: transform 0.2s;
+// &:hover{
+//   transform: scale(1.05);
+// }
+// }
+// `
 const Home = () => {
   return (<>
      <Header/>
@@ -13,7 +22,8 @@ const Home = () => {
             alt="Home-BG-Banner" />
         
                     <div className="home_row">
-                           <Product
+                   
+                           <Product className="home_product"
                             id='123456784'
                             title='ASUS Vivobook 16X (2022), 16-inch (40.64 cms) WUXGA, AMD Ryzen 5 5600H'
                             price={'₹47,990'}
@@ -21,7 +31,8 @@ const Home = () => {
                             rating={4}
                             
                            />
-                            <Product  id='123456785'
+
+                            <Product  className="home_product" id='123456785'
                             title='Tabelito Basic Laptop Bag Sleeve Nylon Case Cover Padded Pouch for 13-35.5 cm/14" ES laptops Multi Pocket Accessories MacBook/Dell/Lenovo/Asus/Hp/Ultrabook/Thinkpad/Ideapad/Surfacepro (Grey)'
                             price={'₹299.00'}
                             image='https://images-eu.ssl-images-amazon.com/images/I/91Jlr8nV0eL._AC_UL160_SR160,160_.jpg'
@@ -30,21 +41,21 @@ const Home = () => {
                            />
                     </div>
                     <div className="home_row">
-                    <Product  id='123456786'
+                    <Product  className="home_product" id='123456786'
                             title='U.S. POLO ASSN. Regallo Skinny Fit Stone Wash Jeans'
                             price={'₹1,990'}
                             image='https://m.media-amazon.com/images/I/71ikxtcDg-L._UX425_.jpg'
                             rating={2}
                             
                            />
-                                <Product  id='123456787'
+                                <Product className="home_product" id='123456787'
                             title='Apple iPhone 13 (128GB) - (Product) RED'
                              price={'₹64,990'}
                             image='https://m.media-amazon.com/images/I/71gm8v4uPBL._SX466_.jpg'
                             rating={4}
                             
                            />
-                                <Product  id='123456788'
+                                <Product className="home_product"  id='123456788'
                             title='LG 185 L 5 Star Inverter Direct-Cool Single Door Refrigerator (GL-D201ASCU, Scarlet Charm, Base stand with drawer)'
                             price={'₹17,990'}
                             image='https://m.media-amazon.com/images/I/61T4yGA9-oL._AC_UL320_.jpg'
@@ -53,7 +64,7 @@ const Home = () => {
                            />
                     </div>    
                     <div className="home_row">
-                    <Product id='123456789'
+                    <Product className="home_product" id='123456789'
                             title='Haier 165L 1 Star Direct Cool Single Door Refrigerator (HED-171RS-P, Red Steel)'
                             price={'₹86,990'}
                             image='https://m.media-amazon.com/images/I/51-V4Rj4jdL._SX466_.jpg'
