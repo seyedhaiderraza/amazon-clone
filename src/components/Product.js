@@ -23,7 +23,7 @@ const Product = ({id, title, image, price, rating,isCheckout=false}) => {
                 <strong>{price && price.substring(1)}</strong>
             </p>
             <div className="product_rating">
-            {Array(rating).fill().map((_,i)=><p>⭐</p>)}
+            {Array(rating).fill().map((_,i)=><p key={i}>⭐</p>)}
             </div>
         </div>
         

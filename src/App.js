@@ -10,6 +10,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { StateContext } from './state/StateProvider';
 import Payment from './components/Payment';
+import { Elements} from '@stripe/react-stripe-js'
+import {loadStripe} from "@stripe/stripe-js"
+
+const promise = loadStripe('pk_test_51NBviXSBPt9TBhsLRap4XBU5KjqmvieNaQYdOLgFa2sNyTHr73riUiGf5p9CaQfp8XNygfoBuRlOtYRrpA7D7FzX00iOgj3FhO')
 function App() {
   const {user,login,logout} = useContext(StateContext)
   useEffect(()=>{
@@ -36,7 +40,11 @@ function App() {
        <Route path="/" element={<Home/>} />
        <Route path="/checkout" element={<Checkout/>} />
        <Route path="/login" element={<Login/>} />
-       <Route path="/payment" element={<Payment/>} />
+       <Route path="/payment" element={
+        <Elements stripe={promise}>
+          <Payment/>
+        </Elements>
+       } />
       </Routes>
    
     </div>

@@ -13,7 +13,6 @@ const Header = () => {
             auth.signOut()
         }
     }
-    console.log('header>>user',user);
   return (
    
     <div className='header'>

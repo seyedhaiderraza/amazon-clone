@@ -3,14 +3,16 @@ import './Subtotal.css'
 import CurrencyFormat from "react-currency-format"
 import { StateContext } from '../state/StateProvider'
 import { useNavigate } from 'react-router-dom'
-const Subtotal = () => {
-const navigate = useNavigate()
-  const getTotalPayment = (basket)=>{
+
+const getTotalPayment = (basket)=>{
 
   return basket.reduce((acc,item)=>{
       return acc + Number(item.price.substring(1).replace(/,/g,''))
     },0)
   }
+ const Subtotal = () => {
+const navigate = useNavigate()
+
 
     const {basket} = useContext(StateContext)
   return (
@@ -39,4 +41,4 @@ const navigate = useNavigate()
             );
     }
 
-export default Subtotal
+export {Subtotal, getTotalPayment}

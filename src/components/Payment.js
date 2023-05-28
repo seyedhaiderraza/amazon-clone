@@ -1,21 +1,111 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from './Header'
 import { StateContext } from '../state/StateProvider'
 import CheckoutProduct from './CheckoutProduct'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import './Payment.css'
+import CurrencyFormat from 'react-currency-format';
+import {CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import { getTotalPayment } from './Subtotal'
+import axios from './axios'
+import { red } from '@mui/material/colors'
+
 const Payment = () => {
+    const navigate  = useNavigate()
     const {user, basket} = useContext(StateContext)
+    const stripe = useStripe()
+    const elements = useElements()
+    const [error, setError] = useState(null)
+    const [processing, setProcessing]= useState("")
+    const [succeeded, setSucceeded] = useState(false)
+    const [disabled, setDisabled] = useState(true)
+    const [clientSecret, setClientSecret] = useState(null)
+
+//every time basket resets
+// all payment amount resets so we need a new clientsecret for new payment
+    useEffect(()=>{
+      console.log('useeffect called error object value', error);
+      /*
+      products removed/card number entered
+      => triggers re-render
+      error will be null
+      */
+        //generate a clientsecret from stripe
+        const getClientSecret = async ()=>{
+            try{
+            const response=await axios({
+                method:`post`,
+                url:`/payments/create?total=${getTotalPayment(basket)*100}`
+            })
+            if(!response?.data?.clientSecret)
+            throw  new Error();
+
+            setClientSecret(response.data.clientSecret)
+          
+        }
+            catch(err){
+                //here error wont be null so disable buy now 
+                
+                setError('Basket is empty cannot proceed with checkouts')
+                setDisabled(true);//disable buy now button
+                }
+        }
+
+       getClientSecret();
+    },[basket])
+console.log('THE client secret is>>>', clientSecret)
+
+
+
+const handleSubmit = async(e)=>{
+    e.preventDefault()
+    setProcessing(true) // buy now clicked once, processing=true=> button disabled for again clicking buy now
+     
+    const payload = await stripe.confirmCardPayment(clientSecret,{ //without clientSecret being correct this will throw error
+        payment_method:{
+            card: elements.getElement(CardElement)
+        }
+    }).then(({paymentIntent})=>{
+        //paymentIntent = payment confirmation
+        console.log('paymentIntent>>>',paymentIntent);
+        setSucceeded(true)
+        setError(null)
+        setProcessing(false)
+        navigate('/orders')
+    } ).catch(err=>
+        setError(err)
+    )
+}
+
+
+const handleChange = (e)=>{
+(error!==""|| basket.length===0 || e.empty)?
+     setDisabled(true):
+    setDisabled(false);
+
+    //means disable buy now button if  either basket is empty or card field is empty
+//if card details are empty not filled 
+/*
+then e.empty ===true si disabled will
+ be true from defualt condition defined 
+ in state on top but if we fill any thing
+  in card details then e.empty will become
+   false so setdisabled will be false as well for the button
+   */
+    setError(e.error ? e.error.message : "");
+}
+
+
   return (
     <> 
      <Header/>
     <div className="payment">
         <div className="payment_container">
-        <h1>
-            Checkout (
-                <Link to="/checkout">{basket?.length} Items</Link>
-            )
-        </h1>
+            <h1>
+                Checkout (
+                    <Link to="/checkout">{basket?.length} Items</Link>
+                )
+            </h1>
             {/**Payment section - delivery addrees */}
             <div className="payment_section">
             <div className="payment_title">
@@ -56,7 +146,39 @@ const Payment = () => {
                         </div>
                         <div className="payment_details">
                             {/*Strip payment*/}
+                            <form onSubmit={handleSubmit}>
+                                <div className="payment_priceContainer">                      
+                                        <CurrencyFormat
+                                            renderText={
+                                                value => 
+                                            <>
+                                            <h3>  <CardElement onChange={handleChange}/>
+                                            Order Total: {value}</h3>
+                                            </>
+                                            } 
+                                            decimalScale={2} 
+                                            value={getTotalPayment(basket)}
+                                            displayType={'text'}
+                                            thousandSeparator={true}
+                                            prefix={'₹'} 
+                                        />
+                                    <button type="submit" disabled={processing||disabled||succeeded}>
+                                             <span>{processing? <p>Processing</p>:"Buy Now"}</span>
+                                    </button>
+                                    </div>
+                                    {
+                                        error && (
+                                                    <>
+                                                     <br/>
+                                                     <div style={{color: "red"}}>
+                                                          {error}
+                                                     </div>
+                                                    </>
+                                        )
+                                    }
+                            </form>
                         </div>
+                       
             </div>
         </div>
     </div>
@@ -65,3 +187,7 @@ const Payment = () => {
 }
 
 export default Payment
+/*
+pk_test_51NBviXSBPt9TBhsLRap4XBU5KjqmvieNaQYdOLgFa2sNyTHr73riUiGf5p9CaQfp8XNygfoBuRlOtYRrpA7D7FzX00iOgj3FhO
+sk_test_51NBviXSBPt9TBhsLUF43kCMag09GFKIATIHejcgK05uKwmJMI0A7EfPSYhrUSV6meP9sjClJstHonTwtco19yEyQ00iDlM0Jpg
+*/
