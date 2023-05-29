@@ -35,5 +35,6 @@
     font-weight: 500;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    white-space: pre-wrap;
     width: 100%;
 }

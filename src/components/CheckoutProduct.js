@@ -5,7 +5,8 @@ const CheckoutProduct = ({id,
     title,
     image,
      price,
-    rating}) => {
+    rating,
+    hideButton}) => {
 
 
 const {removeFromBasket}= useContext(StateContext)
@@ -25,8 +26,8 @@ const removeItemFromBasket = ()=>{//if id given in arg then doesn't works delete
             <div className="checkoutProduct_rating">
             {Array(rating).fill().map((_,i)=><p>⭐</p>)}
             </div>
-            
-      <button onClick={removeItemFromBasket}>Remove from basket</button>
+            {!hideButton && (  <button onClick={removeItemFromBasket}>Remove from basket</button>) }
+    
       </div>
     </div>
   )

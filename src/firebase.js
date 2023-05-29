@@ -19,3 +19,17 @@ const firebaseConfig = {
   const db = getFirestore(firebaseApp);
   
   export { db, auth, createUserWithEmailAndPassword,signInWithEmailAndPassword };
+
+
+  /*
+  app->db rules for read write permissions in firebae db:
+  rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/orders/{orderId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+  */

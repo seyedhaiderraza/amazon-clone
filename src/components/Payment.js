@@ -9,10 +9,12 @@ import {CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { getTotalPayment } from './Subtotal'
 import axios from './axios'
 import { red } from '@mui/material/colors'
+import { db } from '../firebase'
+import { collection, doc, setDoc } from 'firebase/firestore'
 
 const Payment = () => {
     const navigate  = useNavigate()
-    const {user, basket} = useContext(StateContext)
+    const {user, basket, emptyBasket} = useContext(StateContext)
     const stripe = useStripe()
     const elements = useElements()
     const [error, setError] = useState(null)
@@ -58,22 +60,52 @@ console.log('THE client secret is>>>', clientSecret)
 
 
 const handleSubmit = async(e)=>{
+
     e.preventDefault()
+    console.log(JSON.stringify(user));
     setProcessing(true) // buy now clicked once, processing=true=> button disabled for again clicking buy now
      
     const payload = await stripe.confirmCardPayment(clientSecret,{ //without clientSecret being correct this will throw error
         payment_method:{
             card: elements.getElement(CardElement)
         }
-    }).then(({paymentIntent})=>{
+    }).then(async({paymentIntent})=>{
         //paymentIntent = payment confirmation
+//db firebase operation to persist order
+console.log('basket is', basket);
+            const userRef = doc(db, 'users', user?.uid);
+            const ordersRef = collection(userRef, 'orders');
+            const orderDoc = doc(ordersRef, paymentIntent.id);
+            await setDoc(orderDoc, {
+                basket: Array.from(basket),
+                amount: paymentIntent.amount,
+                created: paymentIntent.created
+            });
+        //  .doc(user?.uid) <-- this is old code not working
+        //  .collection('orders')
+        //  .doc(paymentIntent.id)
+        // .set({
+        //      basket:Array.from(basket),
+        //      amount: paymentIntent.created
+        //  })
+        //  .then(()=>{
+        //     console.log('success payment');
+        //  })
+        //  .catch(error => {
+        //     // Error handling
+        //     console.error('Error saving data:', error);
+        //   });
+
         console.log('paymentIntent>>>',paymentIntent);
         setSucceeded(true)
         setError(null)
         setProcessing(false)
+        emptyBasket()
         navigate('/orders')
-    } ).catch(err=>
+    } ).catch(err=>{
         setError(err)
+        console.log(err);
+    }
     )
 }
 
@@ -171,7 +203,7 @@ then e.empty ===true si disabled will
                                                     <>
                                                      <br/>
                                                      <div style={{color: "red"}}>
-                                                          {error}
+                                                          {error.message}
                                                      </div>
                                                     </>
                                         )

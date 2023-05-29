@@ -31,7 +31,11 @@ const initialState ={
                 ...state,
                 basket:newBasket
             };
-           
+           case 'EMPTY_BASKET':
+           return{
+            ...state,
+            basket:[]
+           }
          case 'LOGIN':
             return {
                 ...state,
@@ -84,9 +88,11 @@ console.log(state)//basket
                 }
             )
         }
-
+const emptyBasket = ()=>{
+    dispatch({type:'EMPTY_BASKET'})
+}
    return( 
-   <StateContext.Provider value={{basket:state.basket, addtoBasket,removeFromBasket, user:state.user, login, logout}}
+   <StateContext.Provider value={{basket:state.basket, addtoBasket,removeFromBasket, user:state.user, login, logout, emptyBasket}}
         {...props} />
         )
 }

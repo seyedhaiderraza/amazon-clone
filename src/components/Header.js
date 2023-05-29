@@ -30,10 +30,12 @@ const Header = () => {
                         <span className='header_optionLineTwo'> {user?.email? 'SignOut':'SignIn'}</span>
                     </div>
                     </Link>
+                    <Link to={user && '/orders'}>
                     <div className="header_option">
                         <span className="header_optionLineOne">Returns</span>
                         <span className="header_optionLineTwo">& Orders</span>
                     </div>
+                    </Link>
                     <div className="header_option">
                         <span className="header_optionLineOne">Your</span>
                         <span className="header_optionLineTwo">Prime</span>
